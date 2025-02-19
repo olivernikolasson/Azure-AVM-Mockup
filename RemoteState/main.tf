@@ -28,13 +28,22 @@ resource "azurerm_resource_group" "StateRG" {
 }
 
 resource "azurerm_storage_account" "StateStorage" {
-  name                     = "tfstatestorage"
+  name                     = "stateolnik"
   location                 = local.region
   resource_group_name      = azurerm_resource_group.StateRG.name
   account_tier             = "Standard"
   account_replication_type = "GRS"
+  
 
-  tags = RemoteStateStorage
+  tags = {
+    env = "RemoteState"
+  }
+}
+
+resource "azurerm_storage_container" "StateContainer" {
+    storage_account_id = azurerm_storage_account.StateStorage.id
+    name = "tfstate"
+  
 }
 
 
