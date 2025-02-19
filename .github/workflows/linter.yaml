@@ -21,12 +21,3 @@ jobs:
 
       - name: Run terraform fmt
         run: terraform fmt -recursive
-
-
-      - name: Commit and push changes if needed
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add .
-          git commit -m "Apply Terraform formatting and linting" || echo "No changes to commit"
-          git push
