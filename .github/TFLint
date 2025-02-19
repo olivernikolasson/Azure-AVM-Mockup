@@ -1,27 +1,35 @@
-name: Fix Terraform file formatting
-
+name: Lint
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
 
 jobs:
-  format:
-    runs-on: ubuntu-latest
-    name: Check Terraform file are formatted correctly
+  tflint:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+      name: Checkout source code
+    - uses: actions/cache@v4
+      name: Cache plugin dir
+      with:
+        path: ~/.tflint.d/plugins
+        key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+    - uses: terraform-linters/setup-tflint@v4
+      name: Setup TFLint
+      with:
+        tflint_version: v0.52.0
+    - name: Show version
+      run: tflint --version
 
-      - name: terraform fmt
-        uses: dflook/terraform-fmt@v1
-        with:
-          path: my-terraform-config
+    - name: Init TFLint
+      run: tflint --init
+      env:
+        # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+        GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: terraform fmt
-          title: Reformat terraform files
-          body: Update Terraform files to canonical format using `terraform fmt`
-          branch: automated-terraform-fmt
+    - name: Run TFLint
+      run: tflint -f compact
