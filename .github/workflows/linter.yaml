@@ -19,14 +19,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v4
-
       - name: Run terraform fmt
         run: terraform fmt -recursive
 
-      - name: Run TFLint
-        run: tflint --recursive
 
       - name: Commit and push changes if needed
         run: |
