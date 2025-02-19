@@ -1,3 +1,5 @@
+#only deploy once!
+
 terraform {
   required_providers {
     azurerm = {
