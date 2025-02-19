@@ -1,4 +1,5 @@
 #only deploy once!
+#configure after your needs
 
 terraform {
   required_providers {
