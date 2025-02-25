@@ -1,5 +1,5 @@
 variable "app_name" {
-  description = "Namnet på App Service"
+  description = "web-app-01"
   type        = string
 }
 
@@ -9,7 +9,7 @@ variable "app_service_plan_name" {
 }
 
 variable "location" {
-  description = "Azure-region där resursen ska skapas"
+  description = "West Europe"
   type        = string
 }
 
@@ -25,10 +25,11 @@ variable "os_type" {
 }
 
 variable "sku_name" {
-  description = "SKU för App Service Plan (t.ex. B1, P1v2)"
+  description = "name lmao"
   type        = string
-  default     = "B1"
+  default     = "name"
 }
+
 
 variable "always_on" {
   description = "Om App Service ska vara Always On"

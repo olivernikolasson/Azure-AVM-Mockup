@@ -1,22 +1,22 @@
-resource "azurerm_service_plan" "this" {
-  name                = var.app_service_plan_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  os_type             = var.os_type
-  sku_name            = var.sku_name
-
-  tags = var.tags
+provider "azurerm" {
+  features {}
 }
 
-resource "azurerm_app_service" "this" {
+
+resource "azurerm_service_plan" "example" {
   name                = var.app_name
-  location            = var.location
   resource_group_name = var.resource_group_name
-  app_service_plan_id = azurerm_service_plan.this.id
+  location            = var.location
+  os_type             = var.os_type
+  sku_name            = "B1"
+}
 
-  site_config {
-    always_on = var.always_on
-  }
+resource "azurerm_linux_web_app" "example" {
+  name                = "ollibolljunior"
+  resource_group_name = var.resource_group_name
+  location            = azurerm_service_plan.example.location
+  service_plan_id     = azurerm_service_plan.example.id
 
-  tags = var.tags
+
+  site_config {}
 }
